@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ClassCrest</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Navbar */
+        .admin-navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            margin: 0 8px;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            color: white !important;
+        }
+        
+        .navbar-nav .nav-link i {
+            margin-right: 6px;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            margin-right: 15px;
+        }
+        
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .admin-name {
+            color: white;
+            font-weight: 600;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 0;
+        }
+        
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+        
+        .welcome-section h2 {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-section p {
+            color: #6c757d;
+            margin: 0;
+            font-size: 1.05rem;
+        }
+        
+        /* Summary Cards */
+        .summary-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-left: 5px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(30%, -30%);
+        }
+        
+        .summary-card.students {
+            border-left-color: #3498db;
+        }
+        
+        .summary-card.students::before {
+            background: #3498db;
+        }
+        
+        .summary-card.teachers {
+            border-left-color: #2ecc71;
+        }
+        
+        .summary-card.teachers::before {
+            background: #2ecc71;
+        }
+        
+        .summary-card.classes {
+            border-left-color: #f39c12;
+        }
+        
+        .summary-card.classes::before {
+            background: #f39c12;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card.students .card-icon {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+        
+        .summary-card.teachers .card-icon {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        .summary-card.classes .card-icon {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        .card-details h3 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .card-details p {
+            color: #7f8c8d;
+            font-size: 1.05rem;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        /* Action Cards */
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+            border-color: var(--primary-color);
+        }
+        
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.2rem;
+            color: white;
+        }
+        
+        .action-card:nth-child(1) .action-icon {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+        
+        .action-card:nth-child(2) .action-icon {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        .action-card:nth-child(3) .action-icon {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .action-card:nth-child(4) .action-icon {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .action-card h4 {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .action-card p {
+            color: #7f8c8d;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        /* Footer */
+        .admin-footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px 0;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-section h5 {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .footer-section p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.7;
+            margin: 0;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-info {
+                display: none;
+            }
+            
+            .summary-cards,
+            .action-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg admin-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}">
+                <div class="brand-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                ClassCrest
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="background: white;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'subject-list' %}">
+                            <i class="fas fa-book"></i>Classes & Subjects
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_attendance_report' %}">
+                            <i class="fas fa-calendar-check"></i>Attendance Report
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_exam_report' %}">
+                            <i class="fas fa-chart-bar"></i>Exam & Marks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'upload_common_timetable' %}">
+                            <i class="fas fa-calendar"></i>Upload Time Table
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-5">
+                        <a href="{% url 'logout' %}" class="btn btn-logout">
+                            <i class="fas fa-sign-out-alt me-2 "></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2><i class="fas fa-hand-sparkles me-2"></i>Welcome, {{ request.user.get_full_name }}!</h2>
+                <p>Here's an overview of your institution's current statistics and quick actions.</p>
+            </div>
+
+
+            <!-- Action Cards Section -->
+            <div class="action-section">
+                <h3 class="section-title">
+                    <i class="fas fa-bolt"></i>Quick Actions
+                </h3>
+                
+                <div class="action-cards">
+                    <a href="{% url 'manage_students' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h4>Manage Students</h4>
+                        <p>Add new student to the system</p>
+                    </a>
+                    
+                    <a href="{% url 'manage_teachers' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h4>Manage Teachers</h4>
+                        <p>Add new teacher to the system</p>
+                    </a>
+                    
+                    <a href="{% url 'create_notification' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h4>Make Notifications</h4>
+                        <p>Send alerts to students & teachers</p>
+                    </a>
+                    
+                    <!-- FIXED LINK -->
+                    <a href="{% url 'teacher_list' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h4>Assign Teachers</h4>
+                        <p>Assign teachers to classes</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Summary Cards Section -->
+            <div class="summary-section">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-pie"></i>Statistics Overview
+                </h3>
+                
+                <div class="summary-cards">
+                    <div class="summary-card students">
+                        <div class="card-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="card-details">
+                            <h3>{{ total_students }}</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card teachers">
+                        <div class="card-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="card-details">
+                            <h3>{{ total_teachers }}</h3>
+                            <p>Total Teachers</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card classes">
+                        <div class="card-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="card-details">
+                            <h3>{{ total_classes }}</h3>
+                            <p>Total Classes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="admin-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5><i class="fas fa-graduation-cap me-2"></i>ClassCrest</h5>
+                    <p>
+                        Empowering education through innovative technology. 
+                        Your trusted partner in student management.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="{% url 'manage_students' %}"><i class="fas fa-user-graduate me-2"></i>Manage Students</a></li>
+                        <li><a href="{% url 'manage_teachers' %}"><i class="fas fa-chalkboard-teacher me-2"></i>Manage Teachers</a></li>
+        
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Reports</h5>
+                    <ul>
+                        <li><a href="{% url 'admin_attendance_report' %}"><i class="fas fa-calendar-check me-2"></i>Attendance Reports</a></li>
+                        <li><a href="{% url 'admin_exam_report' %}"><i class="fas fa-chart-bar me-2"></i>Exam Reports</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-question-circle me-2"></i>Help Center</a></li>
+                        <li><a href="#"><i class="fas fa-envelope me-2"></i>Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2024 ClassCrest. All rights reserved. Admin Portal</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

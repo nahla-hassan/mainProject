@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enter Marks</title>
+<style>
+    body {font-family: Arial; background: #f5f6fa; padding: 30px;}
+    table {width: 100%; border-collapse: collapse; margin-top: 10px;}
+    th, td {border: 1px solid #ddd; padding: 10px; text-align: left;}
+    th {background: #667eea; color: white;}
+    tr:nth-child(even) {background: #f2f2f2;}
+    input[type="number"] {width: 70px; padding: 5px; border-radius: 4px; border: 1px solid #ccc;}
+    button {padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;}
+    button:hover {background: #764ba2;}
+    .subject-header {background: #667eea; color: white; font-weight: bold; padding: 8px; margin-top: 20px;}
+    .division-header {background: #764ba2; color: white; font-weight: bold; padding: 8px; margin-top: 10px;}
+    .class-header {background: #4461c7; color: white; font-weight: bold; padding: 8px; margin-top: 20px;}
+</style>
+</head>
+<body>
+<h2>Enter Marks</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="subject">Select Subject:</label>
+    <select name="subject" required>
+        {% for sub in subjects %}
+            <option value="{{ sub.id }}">{{ sub.name }}</option>
+        {% endfor %}
+    </select>
+
+    {% regroup students by student_class as class_list %}
+    {% for class_group in class_list %}
+        
+        {% regroup class_group.list by division as division_list %}
+        {% for div_group in division_list %}
+            <div class="division-header">
+                Class {{ class_group.grouper }} - {{ div_group.grouper }}
+            </div>
+            <table>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Student Name</th>
+                    <th>Marks</th>
+                </tr>
+                {% for student in div_group.list %}
+                <tr>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.user.get_full_name }}</td>
+                    <td>
+                        <input type="number" name="marks_{{ student.id }}" min="0" max="100" required>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endfor %}
+
+    <br>
+    <button type="submit">Submit Marks</button>
+</form>
+</body>
+</html>

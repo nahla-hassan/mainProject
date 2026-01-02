@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Study Materials</title>
+<style>
+:root { --primary-color:#667eea; --secondary-color:#764ba2; }
+
+body {
+    font-family: Arial,sans-serif;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    background: rgba(255,255,255,0.15);
+    padding: 25px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.material-box {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a.download-btn {
+    background: var(--secondary-color);
+    padding: 8px 14px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.back-btn {
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #646363;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>Study Materials</h1>
+
+{% for m in materials %}
+<div class="material-box">
+    <span>{{ m.title }}</span>
+    <a class="download-btn" href="{% url 'study_material_download' m.pk %}">Download</a>
+</div>
+{% empty %}
+<p>No study materials uploaded for your class/division.</p>
+{% endfor %}
+
+
+<a class="back-btn" href="javascript:history.back()">← Back</a>
+</div>
+
+</body>
+</html>

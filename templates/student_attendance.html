@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Attendance</title>
+
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --bg: #f3f4f6;
+        }
+        body {
+            background: var(--bg);
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .btn {
+            background: var(--primary);
+            border: none;
+            padding: 8px 12px;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+        .btn:hover {
+            background: var(--secondary);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+        }
+        .status-present {
+            color: green;
+            font-weight: bold;
+        }
+        .status-absent {
+            color: red;
+            font-weight: bold;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            background: darkgray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Attendance</h2>
+
+    <!-- Buttons -->
+    <div>
+        <a href="?view=daily" class="btn">Daily</a>
+        <a href="?view=weekly" class="btn">Weekly</a>
+        <a href="?view=monthly" class="btn">Monthly</a>
+        
+    </div>
+
+    <!-- Table -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% if view_type == "daily" %}
+            {% for a in attendances %}
+                <tr>
+                    <td>{{ a.date }}</td>
+                    <td>
+                        {% if a.status == "Present" %}
+                            <span class="status-present">Present</span>
+                        {% else %}
+                            <span class="status-absent">Absent</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">No attendance found for today.</td></tr>
+            {% endfor %}
+        {% endif %}
+
+        {% if view_type == "weekly" %}
+            {% for a in attendances %}
+                <tr>
+                    <td>{{ a.date }}</td>
+                    <td>
+                        {% if a.status == "Present" %}
+                            <span class="status-present">Present</span>
+                        {% else %}
+                            <span class="status-absent">Absent</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">No attendance this week.</td></tr>
+            {% endfor %}
+        {% endif %}
+
+        {% if view_type == "monthly" %}
+            {% for a in attendances %}
+                <tr>
+                    <td>{{ a.date }}</td>
+                    <td>
+                        {% if a.status == "Present" %}
+                            <span class="status-present">Present</span>
+                        {% else %}
+                            <span class="status-absent">Absent</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="2">No attendance this month.</td></tr>
+            {% endfor %}
+        {% endif %}
+
+        </tbody>
+    </table>
+    <a href="/student/dashboard/" class="btn back-btn">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Timetable</title>
+<style>
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --bg-color: #f5f6fa;
+    --header-color: #4a69bd;
+    --day-color: #dcdde1;
+    --break-color: #c4f0c4;
+    --hover-color: #f1f2f6;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background: var(--bg-color);
+}
+
+.table-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 16px;
+}
+
+th, td {
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background: var(--header-color);
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    transition: background 0.3s;
+}
+
+tbody tr:nth-child(even) td {
+    background: #f8f9fa; /* Alternating row color */
+}
+
+tbody tr:hover td {
+    background: var(--hover-color);
+}
+
+.day-col {
+    font-weight: bold;
+    background: var(--day-color);
+}
+
+.break-col {
+    background: var(--break-color);
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    table, th, td {
+        font-size: 14px;
+    }
+    .table-container {
+        padding: 15px;
+    }
+    .back-btn {
+        background: #667eea;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        background: #764ba2;
+        color: white;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="table-container">
+
+<h2>Class {{ student.student_class }} - Division {{ student.division }} Timetable</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Day</th>
+            {% for period in period_order %}
+                <th>Period {{ period }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in timetable_grid %}
+        <tr>
+            <td class="day-col">{{ row.day }}</td>
+            {% for entry in row.periods %}
+                <td class="{% if entry and entry.subject|lower == 'break' %}break-col{% endif %}">
+                    {% if entry %}
+                        {{ entry.subject }} ({{ entry.teacher }})
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'student_dashboard' %}" class="back-btn">
+            ⬅ Back
+</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Notifications</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --bg-color: #f5f6fa;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --card-hover-shadow: rgba(102, 126, 234, 0.2);
+            --btn-bg: #667eea;
+            --btn-hover: #764ba2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .notification-card {
+            background-color: var(--card-bg);
+            padding: 22px 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            margin-bottom: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .notification-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--card-hover-shadow);
+        }
+
+        .notification-message {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .attachment-link {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-left: 10px;
+            transition: color 0.2s;
+        }
+
+        .attachment-link:hover {
+            color: var(--primary-color);
+        }
+
+        .no-notifications {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #777;
+            padding: 40px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--btn-bg);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--btn-hover);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .notification-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .attachment-link {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Notifications</h2>
+
+        {% if notifications %}
+            {% for note in notifications %}
+                <div class="notification-card">
+                    <div class="notification-message">{{ note.message }}</div>
+                    <div class="notification-meta">
+                        <span>{{ note.created_at|date:"d M Y" }}</span>
+                        {% if note.attachment %}
+                            <a href="{{ note.attachment.url }}" target="_blank" class="attachment-link">Download PDF</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-notifications">
+                No notifications available.
+            </div>
+        {% endif %}
+
+        <a href="{% url 'teacher_dashboard' %}" class="btn">Back to Home Page</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark Attendance</title>
+<style>
+    body {font-family: Arial; background: #f5f6fa; padding: 30px;}
+    table {width: 100%; border-collapse: collapse; margin-top: 20px;}
+    th, td {border: 1px solid #ddd; padding: 10px; text-align: left;}
+    th {background: #667eea; color: white;}
+    tr:nth-child(even) {background: #f2f2f2;}
+    button {padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;}
+    button:hover {background: #764ba2;}
+    .date-picker {padding: 8px; border-radius: 6px; border: 1px solid #ccc;}
+    .status-options label {margin-right: 15px;} /* space between radio buttons */
+    .division-header {background: #764ba2; color: white; font-weight: bold; padding: 8px; text-align: left;}
+</style>
+</head>
+<body>
+<h2>Mark Attendance</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="date">Select Date:</label>
+    <input type="date" name="date" required class="date-picker">
+
+    {% comment %} Group students by class and division {% endcomment %}
+    {% regroup students by student_class as class_list %}
+    {% for class_group in class_list %}
+        {% regroup class_group.list by division as division_list %}
+        {% for div_group in division_list %}
+            <div class="division-header">
+                Class {{ class_group.grouper }} - {{ div_group.grouper }}
+            </div>
+            <table>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                </tr>
+                {% for student in div_group.list %}
+                <tr>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.user.get_full_name }}</td>
+                    <td class="status-options">
+                        <label><input type="radio" name="status_{{ student.id }}" value="Present" required> Present</label>
+                        <label><input type="radio" name="status_{{ student.id }}" value="Absent"> Absent</label>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+        {% endfor %}
+    {% endfor %}
+
+    <button type="submit">Save Attendance</button>
+</form>
+</body>
+</html>

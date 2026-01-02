@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Timetable</title>
+
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        thead {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: #fff;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Timetable - {{ teacher_name }}</h2>
+
+    {% if timetable %}
+    <table>
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>Division</th>
+                <th>Day</th>
+                <th>Period</th>
+                <th>Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in timetable %}
+            <tr>
+                <td>{{ row.class_name }}</td>
+                <td>{{ row.division }}</td>
+                <td>{{ row.day }}</td>
+                <td>{{ row.period }}</td>
+                <td>{{ row.subject|default:"-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-data">No timetable available.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

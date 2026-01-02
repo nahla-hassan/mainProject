@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Study Material</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --bg-color: #f5f6fa;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input[type="text"], textarea, select, input[type="file"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus,
+        input[type="file"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .messages {
+            margin-bottom: 15px;
+        }
+
+        .messages .success { color: green; }
+        .messages .error { color: red; }
+
+        button {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            align-self: center;
+            width: 50%;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin: 25px auto 0;
+            padding: 12px 20px;
+            width: 50%;
+            background: var(--secondary-color);
+            color: #fff;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h2>Upload Study Material</h2>
+
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div>
+                {{ form.title.label_tag }}
+                {{ form.title }}
+                {% for error in form.title.errors %}
+                    <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.description.label_tag }}
+                {{ form.description }}
+                {% for error in form.description.errors %}
+                    <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.class_name.label_tag }}
+                {{ form.class_name }}
+                {% for error in form.class_name.errors %}
+                    <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.division.label_tag }}
+                {{ form.division }}
+                {% for error in form.division.errors %}
+                    <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div>
+                {{ form.file.label_tag }}
+                {{ form.file }}
+                {% for error in form.file.errors %}
+                    <span style="color:red">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <button type="submit">Upload</button>
+        </form>
+        <a href="{% url 'teacher_dashboard' %}" class="back-btn">Back to Home</a>
+    </div>
+</div>
+</body>
+</html>

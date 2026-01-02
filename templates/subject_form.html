@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-space {
+            margin-right: 5px;
+        }
+        label {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card p-4">
+        <h2 class="mb-4">{{ title }}</h2>
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Render Class Field if exists -->
+            {% if form.class_name %}
+            <div class="mb-3">
+                {{ form.class_name.label_tag }}
+                {{ form.class_name }}
+                {% if form.class_name.errors %}
+                    <div class="text-danger small mt-1">{{ form.class_name.errors|striptags }}</div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Render Subjects Multi-Select -->
+            {% if form.subjects %}
+            <div class="mb-3">
+                <label for="{{ form.subjects.id_for_label }}">{{ form.subjects.label }}</label>
+                <select name="{{ form.subjects.html_name }}" id="{{ form.subjects.id_for_label }}" class="form-select" multiple>
+                    {% for subject in form.subjects.field.queryset %}
+                        <option value="{{ subject.id }}"
+                        {% if subject in form.initial.subjects %}
+                            selected
+                        {% endif %}
+                        >{{ subject.name }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.subjects.errors %}
+                    <div class="text-danger small mt-1">{{ form.subjects.errors|striptags }}</div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Render Other Fields -->
+            {% for field in form %}
+                {% if field.name != "subjects" and field.name != "class_name" %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Buttons -->
+            <button type="submit" class="btn btn-success btn-space">Save</button>
+            <a href="{% url 'subject-list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

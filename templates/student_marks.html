@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Marks</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --pass-color: #28a745;
+            --fail-color: #dc3545;
+            --pending-color: #ffc107;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .dashboard-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .dashboard-btn:hover {
+            background: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .pass {
+            color: var(--pass-color);
+            font-weight: bold;
+        }
+
+        .fail {
+            color: var(--fail-color);
+            font-weight: bold;
+        }
+
+        .pending {
+            color: var(--pending-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <h1>My Marks</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Marks (out of 100)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in marks_list %}
+                <tr>
+                    <td>{{ item.subject }}</td>
+                    <td>{% if item.marks is not None %}{{ item.marks }}{% else %}-{% endif %}</td>
+                    <td class="{% if item.status == 'Pass' %}pass{% elif item.status == 'Fail' %}fail{% else %}pending{% endif %}">
+                        {{ item.status }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No subjects found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'student_dashboard' %}" class="dashboard-btn">← Back to Dashboard</a>
+    </div>
+</body>
+</html>
