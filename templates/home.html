@@ -268,7 +268,7 @@
         .about-image {
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 100%;
+            width: 80%;
         }
         
         .about-content h2 {
@@ -285,23 +285,9 @@
             margin-bottom: 15px;
         }
         
-        .about-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 25px;
-        }
         
-        .about-list li {
-            padding: 10px 0;
-            color: #495057;
-            font-size: 1.05rem;
-        }
         
-        .about-list li i {
-            color: var(--primary-color);
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
+        
         
         /* Stats Section */
         .stats-section {
@@ -448,6 +434,31 @@
             .stat-number {
                 font-size: 2rem;
             }
+
+            .about-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                max-width: 500px;
+            }
+
+            .about-list li {
+                background: #f4f6ff;
+                margin-bottom: 12px;
+                padding: 12px 16px;
+                border-left: 4px solid #4f46e5;
+                border-radius: 6px;
+                font-size: 16px;
+                color: #333;
+            }
+            .about-list li::before {
+                content: "✔";
+                color: #4f46e5;
+                font-weight: bold;
+                margin-right: 10px;
+            }
+
+
         }
     </style>
 </head>
@@ -621,34 +632,33 @@
     </section>
 
     <!-- About Section -->
+    {% load static %}
+
     <section id="about" class="about-section">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400'%3E%3Crect fill='%23667eea' width='600' height='400' rx='15'/%3E%3Cg fill='%23ffffff' opacity='0.9'%3E%3Crect x='100' y='100' width='150' height='200' rx='10'/%3E%3Crect x='350' y='100' width='150' height='200' rx='10'/%3E%3Ccircle cx='175' cy='150' r='30'/%3E%3Ccircle cx='425' cy='150' r='30'/%3E%3C/g%3E%3C/svg%3E" alt="About Us" class="img-fluid about-image">
+                    <img src="{% static 'images/hero.png' %}" 
+                        alt="ClassCrest" 
+                        class="img-fluid about-image">
                 </div>
                 <div class="col-lg-6 about-content">
                     <h2>About ClassCrest</h2>
                     <p>
                         ClassCrest is a cutting-edge student management system designed to revolutionize 
-                        educational administration. We provide schools and institutions with powerful tools 
-                        to manage students, teachers, courses, and more.
-                    </p>
-                    <p>
-                        Our platform bridges the gap between educators, students, and administrators, 
-                        creating a seamless ecosystem for academic excellence.
+                        educational administration.
                     </p>
                     <ul class="about-list">
-                        <li><i class="fas fa-check-circle"></i> User-friendly interface</li>
-                        <li><i class="fas fa-check-circle"></i> Real-time data synchronization</li>
-                        <li><i class="fas fa-check-circle"></i> Mobile-responsive design</li>
-                        <li><i class="fas fa-check-circle"></i> 24/7 customer support</li>
-                        <li><i class="fas fa-check-circle"></i> Customizable dashboards</li>
+                        <li>All student data in one secure place</li>
+                        <li>Easy attendance and academic tracking</li>
+                        <li>Organized records with quick access</li>
+                        <li>Saves time and reduces manual work</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Contact Section -->
     <section id="contact" class="contact-section">
